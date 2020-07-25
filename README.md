@@ -23,7 +23,7 @@ The server runs under `http://localhost:3000`. Boards can be generated using GET
 
 Only one of the parameters `seed` and `seeds` may be specified.
 
-**Sample request:** `http://localhost:3000oot-bingo-api?version=v9.5&seeds=123456,9876&mode=normal`
+**Sample request:** `http://localhost:3000?version=v9.5&seeds=123456,9876&mode=normal`
 
 ### Response
 
