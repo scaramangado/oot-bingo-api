@@ -1,0 +1,27 @@
+{
+  "name": "oot-bingo-api",
+  "version": "1.0.0",
+  "description": "Serves OoT Bingo Boards in raw format",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "supervisor index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scaramangado/oot-bingo-api.git"
+  },
+  "author": "scaramanga",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/scaramangado/oot-bingo-api/issues"
+  },
+  "homepage": "https://github.com/scaramangado/oot-bingo-api#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "supervisor": "^0.12.0"
+  }
+}
