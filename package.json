@@ -2,11 +2,11 @@
   "name": "oot-bingo-api",
   "version": "1.0.0",
   "description": "Serves OoT Bingo Boards in raw format",
-  "main": "index.js",
+  "main": "app/index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
-    "dev": "supervisor index.js"
+    "start": "node app/index.js",
+    "dev": "supervisor app/index.js"
   },
   "repository": {
     "type": "git",
