@@ -34,3 +34,7 @@ The response is a JSON with the following fields
 | `version` | The requested Bingo version                                                                                 |
 | `mode`    | The requested mode (actual goals might be of mode `normal` if requested mode is not known by the generator) |
 | `boards`  | Array of board objects, which have the fields `seed` and `goals` (Array of Strings)                         |
+
+### Bingosync format
+
+Boards can be requested in a format such that they be pasted into the textfield for custom boards on [bingosync.com](https://bingosync.com). To do that the request has to be sent to the `/bingosync` endpoint. The request parameters are the same as above, however `seeds` may only hold one seed.
