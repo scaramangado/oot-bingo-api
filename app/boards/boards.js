@@ -55,7 +55,7 @@ class Boards {
 
     #boardToArray = (seed, mode) => `
         function generateBoard() {	
-    	    var bingoFunc = ootBingoGenerator;
+    	    const bingoFunc = typeof BingoLibrary !== 'undefined'? BingoLibrary.ootBingoGenerator : ootBingoGenerator;
             
     	    bingoOpts = {
     	       seed: "${seed}",
