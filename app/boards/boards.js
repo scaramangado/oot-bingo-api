@@ -4,6 +4,7 @@ import vm from "vm";
 class Boards {
 
     #scripts = {};
+    #allVersions = undefined;
 
     async generateResponse(request) {
 
@@ -14,12 +15,29 @@ class Boards {
                 return { status: 502, body: { error: "GitHub not available." } };
             }
 
+            if (!this.#allVersions) {
+                this.#allVersions = await this.#downloadVersionInfo();
+                if (!this.#allVersions) {
+                    return { status: 502, body: { error: "Failed to fetch version info." } };
+                }
+            }
+
+            let versionNumber;
+            let versionPath;
+
+            try {
+                versionNumber = request.version.match(/^v?([.\d]+)$/)[1];
+                versionPath = this.#allVersions.versions[versionNumber];
+            } catch (e){
+                return { status: 400, body: { error: `Version number ${request.version} is invalid` } };
+            }
+
             let goalList;
             let generator;
 
             try {
-                goalList = await this.#downloadFile(this.#goalListUrl(request.version));
-                generator = await this.#downloadFile(this.#generatorUrl(request.version));
+                goalList = await this.#downloadFile(this.#goalListUrl(versionPath));
+                generator = await this.#downloadFile(this.#generatorUrl(versionPath));
             } catch (e) {
                 console.error(e);
                 return { status: 404, body: { error: `Version ${request.version} not found` } };
@@ -32,8 +50,10 @@ class Boards {
             status: 200, body: {
                 version: request.version,
                 mode: request.mode,
-                boards: request.seeds.map(seed => { return { seed: seed, goals: this.#goals(request.version, seed, request.mode) }; })
-            }
+                boards: request.seeds.map(seed => {
+                    return { seed: seed, goals: this.#goals(request.version, seed, request.mode) };
+                }),
+            },
         };
     }
 
@@ -49,9 +69,9 @@ class Boards {
         }
     };
 
-    #goalListUrl = (version) => `https://raw.githubusercontent.com/ootbingo/bingo/master/${version}/goal-list.js`;
+    #goalListUrl = (version) => `https://raw.githubusercontent.com/ootbingo/bingo/main/${version}/goal-list.js`;
 
-    #generatorUrl = (version) => `https://raw.githubusercontent.com/ootbingo/bingo/master/${version}/generator.js`;
+    #generatorUrl = (version) => `https://raw.githubusercontent.com/ootbingo/bingo/main/${version}/generator.js`;
 
     #boardToArray = (seed, mode) => `
         function generateBoard() {	
@@ -82,10 +102,20 @@ class Boards {
 
     #getSeedRandom = async () => {
         try {
-            return await this.#downloadFile("https://raw.githubusercontent.com/ootbingo/bingo/master/lib/seedrandom-min.js");
+            return await this.#downloadFile("https://raw.githubusercontent.com/ootbingo/bingo/main/lib/seedrandom-min.js");
         } catch (e) {
             console.log(e);
             return null;
+        }
+    };
+
+    #downloadVersionInfo = async () => {
+        try {
+            const file = await this.#downloadFile("https://raw.githubusercontent.com/ootbingo/bingo/main/api/v1/available_versions.json");
+            return JSON.parse(file);
+        } catch (e) {
+            console.log(e);
+            return undefined;
         }
     };
 
@@ -101,18 +131,18 @@ class Boards {
 
                 let chunks_of_data = [];
 
-                response.on('data', (fragments) => {
+                response.on("data", (fragments) => {
                     chunks_of_data.push(fragments);
                 });
 
-                response.on('end', () => {
+                response.on("end", () => {
                     let response_body = Buffer.concat(chunks_of_data);
 
                     // promise resolved on success
                     resolve(response_body.toString());
                 });
 
-                response.on('error', (error) => {
+                response.on("error", (error) => {
                     // promise rejected on error
                     reject(error);
                 });
