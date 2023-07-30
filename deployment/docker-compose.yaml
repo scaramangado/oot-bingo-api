@@ -1,8 +1,8 @@
-version: '3.7'
+version: '3.9'
 services:
-  oot-bingo-api:
+  server:
     build:
-      context: .
+      context: ..
     image: oot-bingo-api
     ports:
         - "13443:3000"
