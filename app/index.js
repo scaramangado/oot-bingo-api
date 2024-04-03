@@ -15,6 +15,7 @@ app.get("/", async (request, response) => {
 
     if (!validationResult.valid) {
         response.status(400).json({ error: validationResult.description });
+        return;
     }
 
     const result = await boards.generateResponse(validationResult.requestInfo);
@@ -27,6 +28,7 @@ app.get("/bingosync", async (request, response) => {
 
     if (!validationResult.valid || validationResult.requestInfo.seeds.length !== 1) {
         response.status(400).json({ error: validationResult.description });
+        return;
     }
 
     const result = await boards.generateResponse(validationResult.requestInfo);
