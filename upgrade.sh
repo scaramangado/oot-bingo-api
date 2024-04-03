@@ -2,5 +2,5 @@
 
 git pull
 (cd deployment \
-  && docker-compose build --pull \
-  && docker-compose up -d)
+  && docker compose build --pull \
+  && docker compose up -d)
