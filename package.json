@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/scaramangado/oot-bingo-api#readme",
   "dependencies": {
-    "express": "^5.0.0"
+    "express": "^5.0.1"
   },
   "devDependencies": {
     "supervisor": "^0.12.0"
